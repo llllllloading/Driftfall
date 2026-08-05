@@ -1,0 +1,1142 @@
+{
+  "schema_version": 1,
+  "project": "Driftfall",
+  "document_type": "ability_upgrade_spec",
+  "notes_ru": [
+    "В документе описаны только 3 базовые способности: Fireball, Breach Mine, Ram Dash.",
+    "У каждой способности сначала покупается общий уровень L1.",
+    "На L2 игрок выбирает одну из двух веток. Вторая ветка для этой способности в текущем матче блокируется.",
+    "L3 можно взять только в продолжение уже выбранной ветки L2."
+  ],
+  "global_rules": {
+    "starting_abilities": [
+      "fireball",
+      "breach_mine",
+      "ram_dash"
+    ],
+    "max_level_per_ability": 3,
+    "branch_choice_at_level_2": true,
+    "level_2_branch_is_locked_for_match": true
+  },
+  "base_actor_stats": {
+    "player_move_speed": 280
+  },
+  "abilities": [
+    {
+      "id": "fireball",
+      "name": "Fireball",
+      "name_ru": "Огненный шар",
+      "role_ru": "Основной дальний скилл для точного попадания и выбивания противников.",
+      "base_stats": {
+        "cooldown_sec": 2.25,
+        "projectile_speed": 580,
+        "max_distance": 1100,
+        "projectile_radius": 14,
+        "knockback": 1050,
+        "hit_stun_sec": 0.18,
+        "instability_gain_per_hit": 0.2,
+        "instability_bonus_cap": 0.8
+      },
+      "upgrade_nodes": [
+        {
+          "id": "fireball_l1_stable_core",
+          "tier": 1,
+          "branch": "core",
+          "name": "Stable Core",
+          "name_ru": "Стабильное ядро",
+          "requires": [],
+          "effects": [
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 2.2
+            },
+            {
+              "stat": "projectile_speed",
+              "op": "set",
+              "value": 720
+            },
+            {
+              "stat": "max_distance",
+              "op": "set",
+              "value": 1200
+            },
+            {
+              "stat": "fire_recovery_sec",
+              "op": "set",
+              "value": 0.16
+            },
+            {
+              "stat": "fire_recovery_move_multiplier",
+              "op": "set",
+              "value": 0.76
+            }
+          ],
+          "resulting_stats": {
+            "cooldown_sec": 2.2,
+            "projectile_speed": 690,
+            "max_distance": 1200,
+            "projectile_radius": 14,
+            "knockback": 1050,
+            "hit_stun_sec": 0.18
+          },
+          "summary_ru": "Базовое усиление Fireball: шар быстрее стартует, чуть чаще используется и меньше наказывает за обычный выстрел."
+        },
+        {
+          "id": "fireball_l2_marksman",
+          "tier": 2,
+          "branch": "precision",
+          "choice_group": "fireball_t2_branch",
+          "name": "Marksman Fireball",
+          "name_ru": "Меткий шар",
+          "requires": [
+            "fireball_l1_stable_core"
+          ],
+          "effects": [
+            {
+              "stat": "projectile_speed",
+              "op": "set",
+              "value": 980
+            },
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 1.85
+            },
+            {
+              "stat": "projectile_radius",
+              "op": "set",
+              "value": 8
+            },
+            {
+              "stat": "max_distance",
+              "op": "set",
+              "value": 1500
+            },
+            {
+              "stat": "knockback",
+              "op": "set",
+              "value": 940
+            },
+            {
+              "stat": "fire_recovery_sec",
+              "op": "set",
+              "value": 0.08
+            },
+            {
+              "stat": "fire_recovery_move_multiplier",
+              "op": "set",
+              "value": 0.92
+            }
+          ],
+          "resulting_stats": {
+            "cooldown_sec": 1.85,
+            "projectile_speed": 980,
+            "max_distance": 1500,
+            "projectile_radius": 8,
+            "knockback": 940,
+            "hit_stun_sec": 0.18,
+            "fire_recovery_sec": 0.08,
+            "fire_recovery_move_multiplier": 0.92
+          },
+          "summary_ru": "Ветка точности. Очень быстрый и тонкий шар для кайта, дальнего контроля и добиваний, который награждает именно за меткость."
+        },
+        {
+          "id": "fireball_l3_sniper_flame",
+          "tier": 3,
+          "branch": "precision",
+          "name": "Sniper Flame",
+          "name_ru": "Снайперское пламя",
+          "requires": [
+            "fireball_l2_marksman"
+          ],
+          "conditional_effects": [
+            {
+              "event": "projectile_hit_player",
+              "conditions": {
+                "projectile_travel_distance_gte": 280
+              },
+              "effects": [
+                {
+                  "stat": "knockback",
+                  "op": "set",
+                  "value": 1420
+                },
+                {
+                  "stat": "hit_stun_sec",
+                  "op": "set",
+                  "value": 0.28
+                },
+                {
+                  "stat": "max_distance",
+                  "op": "set",
+                  "value": 1640
+                }
+              ]
+            }
+          ],
+          "resulting_stats_if_condition_met": {
+            "cooldown_sec": 1.95,
+            "projectile_speed": 920,
+            "max_distance": 1640,
+            "projectile_radius": 9,
+            "knockback": 1420,
+            "hit_stun_sec": 0.28
+          },
+          "summary_ru": "Если попасть с хорошей дистанции, шар превращается в настоящий снайперский выстрел: сильнее выталкивает и заметно дольше фиксирует цель."
+        },
+        {
+          "id": "fireball_l2_impact_core",
+          "tier": 2,
+          "branch": "impact",
+          "choice_group": "fireball_t2_branch",
+          "name": "Impact Core",
+          "name_ru": "Ударное ядро",
+          "requires": [
+            "fireball_l1_stable_core"
+          ],
+          "effects": [
+            {
+              "stat": "knockback",
+              "op": "set",
+              "value": 1620
+            },
+            {
+              "stat": "projectile_speed",
+              "op": "set",
+              "value": 520
+            },
+            {
+              "stat": "projectile_radius",
+              "op": "set",
+              "value": 16
+            },
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 2.45
+            },
+            {
+              "stat": "instability_gain_per_hit",
+              "op": "set",
+              "value": 0.32
+            },
+            {
+              "stat": "instability_bonus_cap",
+              "op": "set",
+              "value": 1.0
+            },
+            {
+              "stat": "fire_recovery_sec",
+              "op": "set",
+              "value": 0.26
+            },
+            {
+              "stat": "fire_recovery_move_multiplier",
+              "op": "set",
+              "value": 0.52
+            }
+          ],
+          "resulting_stats": {
+            "cooldown_sec": 2.45,
+            "projectile_speed": 520,
+            "max_distance": 1200,
+            "projectile_radius": 16,
+            "knockback": 1620,
+            "hit_stun_sec": 0.18,
+            "instability_gain_per_hit": 0.32,
+            "instability_bonus_cap": 1.0,
+            "fire_recovery_sec": 0.26,
+            "fire_recovery_move_multiplier": 0.52
+          },
+          "summary_ru": "Ветка силы. Тяжёлый широкий шар, который резко раскачивает уязвимость и сильно продавливает позицию, но ощутимо коммитит стрелка."
+        },
+        {
+          "id": "fireball_l3_siege_fireball",
+          "tier": 3,
+          "branch": "impact",
+          "name": "Siege Fireball",
+          "name_ru": "Осадный шар",
+          "requires": [
+            "fireball_l2_impact_core"
+          ],
+          "effects": [
+            {
+              "stat": "knockback",
+              "op": "set",
+              "value": 1700
+            },
+            {
+              "stat": "projectile_radius",
+              "op": "set",
+              "value": 17
+            },
+            {
+              "stat": "projectile_speed",
+              "op": "set",
+              "value": 540
+            },
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 2.55
+            },
+            {
+              "stat": "fire_recovery_sec",
+              "op": "set",
+              "value": 0.26
+            },
+            {
+              "stat": "fire_recovery_move_multiplier",
+              "op": "set",
+              "value": 0.5
+            }
+          ],
+          "resulting_stats": {
+            "cooldown_sec": 2.55,
+            "projectile_speed": 540,
+            "max_distance": 1200,
+            "projectile_radius": 17,
+            "knockback": 1700,
+            "hit_stun_sec": 0.18,
+            "instability_gain_per_hit": 0.28,
+            "instability_bonus_cap": 1.0,
+            "fire_recovery_sec": 0.26,
+            "fire_recovery_move_multiplier": 0.5
+          },
+          "summary_ru": "Осадная версия Fireball. Огромный тяжёлый снаряд для продавливания и выбивания в один момент, но с самой жёсткой ценой за промах."
+        }
+      ]
+    },
+    {
+      "id": "breach_mine",
+      "name": "Breach Mine",
+      "name_ru": "Проломная мина",
+      "role_ru": "Контроль территории, ловушки и создание опасных провалов в арене.",
+      "base_stats": {
+        "place_time_sec": 0.38,
+        "arm_delay_sec": 3.0,
+        "trigger_radius": 96,
+        "trigger_to_explosion_delay_sec": 0.38,
+        "explosion_radius": 178,
+        "knockback": 880,
+        "hole_radius": 58,
+        "cooldown_sec": 4.0,
+        "owner_safe_time_sec": 0.2,
+        "control_lock_sec": 0.08
+      },
+      "upgrade_nodes": [
+        {
+          "id": "mine_l1_quick_deploy",
+          "tier": 1,
+          "branch": "core",
+          "name": "Quick Deploy",
+          "name_ru": "Быстрая установка",
+          "requires": [],
+          "effects": [
+            {
+              "stat": "place_time_sec",
+              "op": "set",
+              "value": 0.26
+            },
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 4.0
+            },
+            {
+              "stat": "arm_delay_sec",
+              "op": "set",
+              "value": 2.6
+            },
+            {
+              "stat": "trigger_radius",
+              "op": "set",
+              "value": 108
+            },
+            {
+              "stat": "trigger_to_explosion_delay_sec",
+              "op": "set",
+              "value": 0.55
+            },
+            {
+              "stat": "owner_safe_time_sec",
+              "op": "set",
+              "value": 1.0
+            },
+            {
+              "stat": "control_lock_sec",
+              "op": "set",
+              "value": 0.14
+            }
+          ],
+          "resulting_stats": {
+            "place_time_sec": 0.26,
+            "arm_delay_sec": 2.6,
+            "trigger_radius": 108,
+            "trigger_to_explosion_delay_sec": 0.55,
+            "explosion_radius": 170,
+            "knockback": 880,
+            "hole_radius": 58,
+            "cooldown_sec": 4.0,
+            "owner_safe_time_sec": 1.0,
+            "control_lock_sec": 0.14
+          },
+          "summary_ru": "Базовое усиление мины: быстрее ставится, раньше включается и чуть шире ловит вход в зону, поэтому уже с первого апгрейда становится полноценной боевой кнопкой."
+        },
+        {
+          "id": "mine_l2_wide_sensor",
+          "tier": 2,
+          "branch": "trap_control",
+          "choice_group": "mine_t2_branch",
+          "name": "Wide Sensor",
+          "name_ru": "Широкий сенсор",
+          "requires": [
+            "mine_l1_quick_deploy"
+          ],
+          "effects": [
+            {
+              "stat": "trigger_radius",
+              "op": "set",
+              "value": 156
+            },
+            {
+              "stat": "arm_delay_sec",
+              "op": "set",
+              "value": 2.1
+            },
+            {
+              "stat": "trigger_to_explosion_delay_sec",
+              "op": "set",
+              "value": 0.18
+            },
+            {
+              "stat": "explosion_radius",
+              "op": "set",
+              "value": 236
+            },
+            {
+              "stat": "hole_radius",
+              "op": "set",
+              "value": 36
+            },
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 3.85
+            },
+            {
+              "stat": "control_lock_sec",
+              "op": "set",
+              "value": 0.16
+            }
+          ],
+          "resulting_stats": {
+            "place_time_sec": 0.3,
+            "arm_delay_sec": 2.1,
+            "trigger_radius": 156,
+            "trigger_to_explosion_delay_sec": 0.18,
+            "explosion_radius": 236,
+            "knockback": 880,
+            "hole_radius": 36,
+            "cooldown_sec": 3.85,
+            "owner_safe_time_sec": 0.9,
+            "control_lock_sec": 0.16
+          },
+          "summary_ru": "Ветка контроля. Далеко видит и почти сразу наказывает вход, поэтому мина реально перекрывает проход, а не просто создаёт угрозу."
+        },
+        {
+          "id": "mine_l3_control_blast",
+          "tier": 3,
+          "branch": "trap_control",
+          "name": "Control Blast",
+          "name_ru": "Контрольный взрыв",
+          "requires": [
+            "mine_l2_wide_sensor"
+          ],
+          "effects": [
+            {
+              "stat": "explosion_radius",
+              "op": "set",
+              "value": 276
+            },
+            {
+              "stat": "trigger_radius",
+              "op": "set",
+              "value": 174
+            },
+            {
+              "stat": "knockback",
+              "op": "set",
+              "value": 1280
+            },
+            {
+              "stat": "hole_radius",
+              "op": "set",
+              "value": 32
+            },
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 3.65
+            },
+            {
+              "stat": "trigger_to_explosion_delay_sec",
+              "op": "set",
+              "value": 0.1
+            },
+            {
+              "stat": "control_lock_sec",
+              "op": "set",
+              "value": 0.22
+            }
+          ],
+          "resulting_stats": {
+            "place_time_sec": 0.3,
+            "arm_delay_sec": 2.1,
+            "trigger_radius": 174,
+            "trigger_to_explosion_delay_sec": 0.1,
+            "explosion_radius": 276,
+            "knockback": 1280,
+            "hole_radius": 32,
+            "cooldown_sec": 3.65,
+            "owner_safe_time_sec": 0.9,
+            "control_lock_sec": 0.22
+          },
+          "summary_ru": "Максимум контроля. Огромная зона угрозы и почти мгновенный подрыв, чтобы противник не успевал безнаказанно выбегать из ловушки."
+        },
+        {
+          "id": "mine_l2_deep_breach",
+          "tier": 2,
+          "branch": "breach",
+          "choice_group": "mine_t2_branch",
+          "name": "Deep Breach",
+          "name_ru": "Глубокий пролом",
+          "requires": [
+            "mine_l1_quick_deploy"
+          ],
+          "effects": [
+            {
+              "stat": "hole_radius",
+              "op": "set",
+              "value": 118
+            },
+            {
+              "stat": "explosion_radius",
+              "op": "set",
+              "value": 182
+            },
+            {
+              "stat": "trigger_radius",
+              "op": "set",
+              "value": 94
+            },
+            {
+              "stat": "arm_delay_sec",
+              "op": "set",
+              "value": 2.55
+            },
+            {
+              "stat": "trigger_to_explosion_delay_sec",
+              "op": "set",
+              "value": 0.28
+            },
+            {
+              "stat": "knockback",
+              "op": "set",
+              "value": 1080
+            },
+            {
+              "stat": "control_lock_sec",
+              "op": "set",
+              "value": 0.16
+            },
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 3.95
+            }
+          ],
+          "resulting_stats": {
+            "place_time_sec": 0.3,
+            "arm_delay_sec": 2.55,
+            "trigger_radius": 94,
+            "trigger_to_explosion_delay_sec": 0.28,
+            "explosion_radius": 182,
+            "knockback": 1080,
+            "hole_radius": 118,
+            "cooldown_sec": 3.95,
+            "owner_safe_time_sec": 0.9,
+            "control_lock_sec": 0.16
+          },
+          "summary_ru": "Ветка пролома. Мина быстрее доводит ошибку до наказания и оставляет уже действительно крупный провал, который ломает линию отхода и маршрут вокруг зоны."
+        },
+        {
+          "id": "mine_l3_collapse",
+          "tier": 3,
+          "branch": "breach",
+          "name": "Collapse",
+          "name_ru": "Обвал",
+          "requires": [
+            "mine_l2_deep_breach"
+          ],
+          "effects": [
+            {
+              "stat": "arm_delay_sec",
+              "op": "set",
+              "value": 1.55
+            },
+            {
+              "stat": "trigger_to_explosion_delay_sec",
+              "op": "set",
+              "value": 0.08
+            },
+            {
+              "stat": "explosion_radius",
+              "op": "set",
+              "value": 244
+            },
+            {
+              "stat": "hole_radius",
+              "op": "set",
+              "value": 152
+            },
+            {
+              "stat": "knockback",
+              "op": "set",
+              "value": 1320
+            },
+            {
+              "stat": "control_lock_sec",
+              "op": "set",
+              "value": 0.2
+            },
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 3.7
+            }
+          ],
+          "resulting_stats": {
+            "place_time_sec": 0.3,
+            "arm_delay_sec": 1.55,
+            "trigger_radius": 94,
+            "trigger_to_explosion_delay_sec": 0.08,
+            "explosion_radius": 244,
+            "knockback": 1320,
+            "hole_radius": 152,
+            "cooldown_sec": 3.7,
+            "owner_safe_time_sec": 0.9,
+            "control_lock_sec": 0.2
+          },
+          "summary_ru": "Максимум разрушения. Ошибка на входе почти сразу превращается в жёсткий выбивающий взрыв, а после него остаётся огромный провал, который ломает целый сектор арены."
+        }
+      ]
+    },
+    {
+      "id": "ram_dash",
+      "name": "Ram Dash",
+      "name_ru": "Таранный рывок",
+      "role_ru": "Врыв, смена позиции и силовое выбивание в ближнем бою.",
+      "base_stats": {
+        "cooldown_sec": 4.15,
+        "dash_duration_sec": 0.17,
+        "dash_speed": 1180,
+        "dash_distance": 290,
+        "dash_knockback": 1320,
+        "hit_radius_bonus": 18,
+        "windup_sec": 0.2
+      },
+      "upgrade_nodes": [
+        {
+          "id": "dash_l1_boosters",
+          "tier": 1,
+          "branch": "core",
+          "name": "Boosters",
+          "name_ru": "Ускорители",
+          "requires": [],
+          "effects": [
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 3.35
+            },
+            {
+              "stat": "dash_speed",
+              "op": "set",
+              "value": 1320
+            },
+            {
+              "stat": "dash_duration_sec",
+              "op": "set",
+              "value": 0.22
+            },
+            {
+              "stat": "dash_distance",
+              "op": "set",
+              "value": 360
+            },
+            {
+              "stat": "windup_sec",
+              "op": "set",
+              "value": 0.16
+            }
+          ],
+          "resulting_stats": {
+            "cooldown_sec": 3.35,
+            "dash_duration_sec": 0.22,
+            "dash_speed": 1320,
+            "dash_distance": 360,
+            "dash_knockback": 1320,
+            "hit_radius_bonus": 18,
+            "windup_sec": 0.16
+          },
+          "summary_ru": "Базовое усиление Dash: заметно дальше летит, быстрее стартует и уже уверенно используется как реальная смена позиции или спасение с края."
+        },
+        {
+          "id": "dash_l2_ram",
+          "tier": 2,
+          "branch": "impact",
+          "choice_group": "dash_t2_branch",
+          "name": "Ram",
+          "name_ru": "Таран",
+          "requires": [
+            "dash_l1_boosters"
+          ],
+          "effects": [
+            {
+              "stat": "dash_knockback",
+              "op": "set",
+              "value": 1860
+            },
+            {
+              "stat": "hit_radius_bonus",
+              "op": "set",
+              "value": 44
+            },
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 4.0
+            },
+            {
+              "stat": "dash_duration_sec",
+              "op": "set",
+              "value": 0.23
+            },
+            {
+              "stat": "dash_speed",
+              "op": "set",
+              "value": 1320
+            },
+            {
+              "stat": "dash_distance",
+              "op": "set",
+              "value": 390
+            },
+            {
+              "stat": "windup_sec",
+              "op": "set",
+              "value": 0.23
+            }
+          ],
+          "resulting_stats": {
+            "cooldown_sec": 4.0,
+            "dash_duration_sec": 0.23,
+            "dash_speed": 1320,
+            "dash_distance": 390,
+            "dash_knockback": 1860,
+            "hit_radius_bonus": 44,
+            "windup_sec": 0.23
+          },
+          "summary_ru": "Ветка силового врыва. Рывок стал длиннее и тяжелее, сильнее продавливает цель и уже ощущается как настоящий таран."
+        },
+        {
+          "id": "dash_l3_breach_run",
+          "tier": 3,
+          "branch": "impact",
+          "name": "Breach Run",
+          "name_ru": "Пролом",
+          "requires": [
+            "dash_l2_ram"
+          ],
+          "effects": [
+            {
+              "stat": "dash_knockback",
+              "op": "set",
+              "value": 1720
+            }
+          ],
+          "conditional_effects": [
+            {
+              "event": "dash_first_target_hit",
+              "effects": [
+                {
+                  "stat": "remaining_dash_duration_sec",
+                  "op": "add",
+                  "value": 0.12
+                }
+              ]
+            },
+            {
+              "event": "dash_second_target_hit",
+              "effects": [
+                {
+                  "stat": "dash_knockback",
+                  "op": "mul",
+                  "value": 0.7
+                }
+              ]
+            }
+          ],
+          "resulting_behavior": {
+            "base_dash_knockback": 1720,
+            "extra_dash_duration_after_first_hit_sec": 0.12,
+            "second_target_knockback_multiplier": 0.7,
+            "second_target_effective_knockback": 1204
+          },
+          "summary_ru": "После первого тарана рывок заметно дотягивается дальше, а второй задетый противник всё ещё получает тяжёлый выбивающий импульс."
+        },
+        {
+          "id": "dash_l2_quick_step",
+          "tier": 2,
+          "branch": "mobility",
+          "choice_group": "dash_t2_branch",
+          "name": "Quick Step",
+          "name_ru": "Быстрый шаг",
+          "requires": [
+            "dash_l1_boosters"
+          ],
+          "effects": [
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 2.55
+            },
+            {
+              "stat": "dash_speed",
+              "op": "set",
+              "value": 1820
+            },
+            {
+              "stat": "dash_duration_sec",
+              "op": "set",
+              "value": 0.2
+            },
+            {
+              "stat": "dash_distance",
+              "op": "set",
+              "value": 470
+            },
+            {
+              "stat": "dash_knockback",
+              "op": "set",
+              "value": 960
+            },
+            {
+              "stat": "hit_radius_bonus",
+              "op": "set",
+              "value": 12
+            },
+            {
+              "stat": "windup_sec",
+              "op": "set",
+              "value": 0.1
+            }
+          ],
+          "resulting_stats": {
+            "cooldown_sec": 2.55,
+            "dash_duration_sec": 0.2,
+            "dash_speed": 1820,
+            "dash_distance": 470,
+            "dash_knockback": 960,
+            "hit_radius_bonus": 12,
+            "windup_sec": 0.1
+          },
+          "summary_ru": "Ветка мобильности. Dash теперь действительно далеко переносит игрока, даёт сильную смену угла и становится полноценным инструментом ухода из опасной зоны."
+        },
+        {
+          "id": "dash_l3_slipstream",
+          "tier": 3,
+          "branch": "mobility",
+          "name": "Slipstream",
+          "name_ru": "Попутный поток",
+          "requires": [
+            "dash_l2_quick_step"
+          ],
+          "conditional_effects": [
+            {
+              "event": "dash_finished",
+              "effects": [
+                {
+                  "stat": "temporary_move_speed_multiplier",
+                  "op": "set",
+                  "value": 1.42
+                },
+                {
+                  "stat": "temporary_move_speed_duration_sec",
+                  "op": "set",
+                  "value": 0.9
+                },
+                {
+                  "stat": "temporary_incoming_knockback_multiplier",
+                  "op": "set",
+                  "value": 0.66
+                },
+                {
+                  "stat": "temporary_incoming_knockback_duration_sec",
+                  "op": "set",
+                  "value": 0.6
+                }
+              ]
+            }
+          ],
+          "resulting_behavior": {
+            "move_speed_after_dash": 396,
+            "move_speed_bonus_duration_sec": 0.9,
+            "incoming_knockback_multiplier_after_dash": 0.66,
+            "incoming_knockback_reduction_duration_sec": 0.6
+          },
+          "summary_ru": "После рывка игрок ещё дольше живёт на темпе: быстрее перестраивается и короткое время заметно сложнее выбивается в ответ."
+        }
+      ]
+    },
+    {
+      "id": "reflect_shield",
+      "name": "Reflect Shield",
+      "name_ru": "Отражающий щит",
+      "role_ru": "Защитная способность для контры против Fireball, разворота разменов и mindgame в дуэлях.",
+      "base_stats": {
+        "cooldown_sec": 11.0,
+        "duration_sec": 2.0,
+        "max_reflects": 1,
+        "move_speed_multiplier_while_active": 0.9,
+        "shield_radius_multiplier": 1.35,
+        "reflect_speed_multiplier": 1.0,
+        "reflect_knockback_multiplier": 1.0,
+        "reflect_instability_bonus": 0.0,
+        "split_projectile_count": 0,
+        "split_angle_deg": 20.0,
+        "split_knockback_multiplier": 0.4,
+        "split_speed_multiplier": 0.85,
+        "phase_flicker_distance": 0.0,
+        "second_reflect_bonus_speed_multiplier": 1.0
+      },
+      "upgrade_nodes": [
+        {
+          "id": "reflect_l1_mirror_core",
+          "tier": 1,
+          "branch": "core",
+          "name": "Mirror Core",
+          "name_ru": "Зеркальное ядро",
+          "requires": [],
+          "effects": [
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 11.0
+            },
+            {
+              "stat": "duration_sec",
+              "op": "set",
+              "value": 2.0
+            },
+            {
+              "stat": "max_reflects",
+              "op": "set",
+              "value": 1
+            },
+            {
+              "stat": "move_speed_multiplier_while_active",
+              "op": "set",
+              "value": 0.9
+            },
+            {
+              "stat": "shield_radius_multiplier",
+              "op": "set",
+              "value": 1.35
+            }
+          ],
+          "resulting_stats": {
+            "cooldown_sec": 11.0,
+            "duration_sec": 2.0,
+            "max_reflects": 1,
+            "move_speed_multiplier_while_active": 0.9,
+            "shield_radius_multiplier": 1.35,
+            "reflect_speed_multiplier": 1.0,
+            "reflect_knockback_multiplier": 1.0
+          },
+          "summary_ru": "Открывает Reflect Shield: короткий щит на 2 секунды, который отражает один вражеский Fireball обратно."
+        },
+        {
+          "id": "reflect_l2_charged_shell",
+          "tier": 2,
+          "branch": "core",
+          "name": "Charged Shell",
+          "name_ru": "Заряженная оболочка",
+          "requires": [
+            "reflect_l1_mirror_core"
+          ],
+          "effects": [
+            {
+              "stat": "cooldown_sec",
+              "op": "set",
+              "value": 10.0
+            },
+            {
+              "stat": "duration_sec",
+              "op": "set",
+              "value": 2.25
+            },
+            {
+              "stat": "move_speed_multiplier_while_active",
+              "op": "set",
+              "value": 0.95
+            },
+            {
+              "stat": "reflect_speed_multiplier",
+              "op": "set",
+              "value": 1.15
+            }
+          ],
+          "resulting_stats": {
+            "cooldown_sec": 10.0,
+            "duration_sec": 2.25,
+            "max_reflects": 1,
+            "move_speed_multiplier_while_active": 0.95,
+            "shield_radius_multiplier": 1.35,
+            "reflect_speed_multiplier": 1.15,
+            "reflect_knockback_multiplier": 1.0
+          },
+          "summary_ru": "Базовое усиление Reflect Shield: живёт дольше, меньше тормозит игрока и возвращает шар заметно быстрее."
+        },
+        {
+          "id": "reflect_l3_split_reflect",
+          "tier": 3,
+          "branch": "trickster",
+          "choice_group": "reflect_t3_branch",
+          "name": "Split Reflect",
+          "name_ru": "Расщеплённый отскок",
+          "requires": [
+            "reflect_l2_charged_shell"
+          ],
+          "effects": [
+            {
+              "stat": "split_projectile_count",
+              "op": "set",
+              "value": 2
+            },
+            {
+              "stat": "split_angle_deg",
+              "op": "set",
+              "value": 20.0
+            },
+            {
+              "stat": "split_knockback_multiplier",
+              "op": "set",
+              "value": 0.4
+            },
+            {
+              "stat": "split_speed_multiplier",
+              "op": "set",
+              "value": 0.85
+            }
+          ],
+          "resulting_behavior": {
+            "reflected_main_projectile": "returns_to_sender",
+            "split_projectile_count": 2,
+            "split_angles_deg": [
+              -20,
+              20
+            ],
+            "split_knockback_multiplier": 0.4,
+            "split_speed_multiplier": 0.85
+          },
+          "summary_ru": "После отражения шар расщепляется: основной летит назад, а ещё два осколка под углами создают хаос и добивающие траектории."
+        },
+        {
+          "id": "reflect_l4_phase_flicker",
+          "tier": 4,
+          "branch": "trickster",
+          "name": "Phase Flicker",
+          "name_ru": "Фазовый сдвиг",
+          "requires": [
+            "reflect_l3_split_reflect"
+          ],
+          "conditional_effects": [
+            {
+              "event": "reflect_success",
+              "effects": [
+                {
+                  "stat": "phase_flicker_distance",
+                  "op": "set",
+                  "value": 80.0
+                }
+              ]
+            }
+          ],
+          "resulting_behavior": {
+            "phase_flicker_distance": 80.0,
+            "phase_flicker_direction": "current_move_or_reverse_incoming"
+          },
+          "summary_ru": "После удачного отражения игрок резко смещается в сторону и ломает ответный прицел соперника."
+        },
+        {
+          "id": "reflect_l3_heavy_return",
+          "tier": 3,
+          "branch": "punisher",
+          "choice_group": "reflect_t3_branch",
+          "name": "Heavy Return",
+          "name_ru": "Тяжёлый возврат",
+          "requires": [
+            "reflect_l2_charged_shell"
+          ],
+          "effects": [
+            {
+              "stat": "reflect_knockback_multiplier",
+              "op": "set",
+              "value": 1.25
+            },
+            {
+              "stat": "reflect_instability_bonus",
+              "op": "set",
+              "value": 0.2
+            }
+          ],
+          "resulting_behavior": {
+            "reflect_knockback_multiplier": 1.25,
+            "reflect_instability_bonus": 0.2
+          },
+          "summary_ru": "Отражённый Fireball больнее выбивает и сразу сильнее раскачивает уязвимость цели."
+        },
+        {
+          "id": "reflect_l4_double_mirror",
+          "tier": 4,
+          "branch": "punisher",
+          "name": "Double Mirror",
+          "name_ru": "Двойное зеркало",
+          "requires": [
+            "reflect_l3_heavy_return"
+          ],
+          "effects": [
+            {
+              "stat": "max_reflects",
+              "op": "set",
+              "value": 2
+            },
+            {
+              "stat": "second_reflect_bonus_speed_multiplier",
+              "op": "set",
+              "value": 1.1
+            }
+          ],
+          "resulting_behavior": {
+            "max_reflects": 2,
+            "second_reflect_bonus_speed_multiplier": 1.1
+          },
+          "summary_ru": "Щит держит два отражения за одну активацию, а второй возвращённый шар летит ещё быстрее."
+        }
+      ]
+    }
+  ]
+}

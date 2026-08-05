@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://p8kbfmcourv1"]
+
+[ext_resource type="Script" uid="uid://64fnss1c06fd" path="res://scripts/player.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://wy20kqwpfivp" path="res://scripts/bot_player.gd" id="2_t4w3s"]
+[ext_resource type="Script" uid="uid://c7l3nvnk7nxlb" path="res://scripts/match_controller.gd" id="3_h6l0k"]
+[ext_resource type="Script" uid="uid://bqd1te4mptom1" path="res://scripts/arena.gd" id="4_uwg60"]
+
+[node name="Main" type="Node2D" unique_id=1349893307]
+script = ExtResource("3_h6l0k")
+
+[node name="Projectiles" type="Node2D" parent="." unique_id=1797896109]
+
+[node name="Powerups" type="Node2D" parent="." unique_id=1961143392]
+
+[node name="Arena" type="Node2D" parent="." unique_id=1525285840]
+script = ExtResource("4_uwg60")
+
+[node name="Players" type="Node2D" parent="." unique_id=1704577754]
+
+[node name="Player" type="CharacterBody2D" parent="Players" unique_id=1911465758]
+position = Vector2(960, 540)
+script = ExtResource("1_ig7tw")
+
+[node name="Camera2D" type="Camera2D" parent="Players/Player" unique_id=1276442711]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="Bot" type="CharacterBody2D" parent="Players" unique_id=1877040245]
+position = Vector2(1280, 540)
+script = ExtResource("2_t4w3s")
+
+[node name="Mines" type="Node2D" parent="." unique_id=1930059136]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=790429542]
