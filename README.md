@@ -1,2 +1,3 @@
 # Driftfall
-Driftfall is a fast-paced multiplayer arena prototype where players push, bait, and outplay each other with skill-based abilities, shifting danger zones, upgrade choices, and high-mobility combat.
+
+Driftfall is a fast-paced arena PvP prototype inspired by skill-based knockback combat. Players fight across shrinking space, unlock and upgrade abilities between rounds, contest random powerups, and try to outplay each other through positioning, timing, and mechanical precision rather than raw damage.
